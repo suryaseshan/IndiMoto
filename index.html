@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>MotoRoute Studio</title>
+    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css?v=4" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="map-zone" aria-label="Route map">
+        <div id="map"></div>
+        <div class="map-credit">
+          Basemap by <a href="https://openfreemap.org/" target="_blank" rel="noopener">OpenFreeMap</a> and
+          <a href="https://openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a>.
+          Data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.
+          <a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener">Report a map issue</a>.
+          Routing by <a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM</a>.
+          Elevation by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+        </div>
+      </section>
+
+      <aside class="control-panel" aria-label="Motorcycle route controls">
+        <header class="brand-bar">
+          <div>
+            <p class="eyebrow">Open map route builder</p>
+            <h1>MotoRoute Studio</h1>
+          </div>
+          <span class="live-dot" aria-hidden="true"></span>
+        </header>
+
+        <form id="routeForm" class="route-form">
+          <label>
+            <span>Start</span>
+            <input id="startInput" name="start" type="text" placeholder="City, landmark, or address" autocomplete="off" list="locationHistory" required />
+          </label>
+
+          <button class="swap-button" id="swapButton" type="button" aria-label="Swap start and destination" title="Swap start and destination">
+            Swap
+          </button>
+
+          <label>
+            <span>Destination</span>
+            <input id="endInput" name="end" type="text" placeholder="Where are you riding to?" autocomplete="off" list="locationHistory" required />
+          </label>
+
+          <datalist id="locationHistory"></datalist>
+
+          <div class="recent-routes">
+            <span>Recent</span>
+            <div id="recentRoutes" class="recent-route-list"></div>
+          </div>
+
+          <fieldset>
+            <legend>Ride style</legend>
+            <div class="segmented">
+              <label><input type="radio" name="style" value="balanced" checked /><span>Balanced</span></label>
+              <label><input type="radio" name="style" value="twisty" /><span>Twisty</span></label>
+              <label><input type="radio" name="style" value="quick" /><span>Quick</span></label>
+              <label><input type="radio" name="style" value="highway" /><span>State Hwy</span></label>
+              <label><input type="radio" name="style" value="offroad" /><span>Trails</span></label>
+            </div>
+          </fieldset>
+
+          <button class="primary-action" type="submit">
+            <span aria-hidden="true">+</span>
+            Build Routes
+          </button>
+        </form>
+
+        <nav class="tabs" aria-label="Route information">
+          <button type="button" class="tab-button active" data-tab="insights">Insights</button>
+          <button type="button" class="tab-button" data-tab="directions">Directions</button>
+        </nav>
+
+        <section id="status" class="status-line" aria-live="polite">Enter two locations to create a motorcycle route.</section>
+
+        <section id="insightsTab" class="tab-panel active">
+          <div class="metric-grid" aria-label="Route summary">
+            <article>
+              <span>Distance</span>
+              <strong id="distanceMetric">--</strong>
+            </article>
+            <article>
+              <span>Ride Time</span>
+              <strong id="timeMetric">--</strong>
+            </article>
+            <article>
+              <span>Turns</span>
+              <strong id="turnMetric">--</strong>
+            </article>
+            <article>
+              <span>Flow</span>
+              <strong id="flowMetric">--</strong>
+            </article>
+            <article>
+              <span>Elevation</span>
+              <strong id="elevationMetric">--</strong>
+            </article>
+          </div>
+
+          <div class="insight-block">
+            <h2>Route Character</h2>
+            <p id="characterText">Your route summary will appear here after planning.</p>
+          </div>
+
+          <div class="insight-block">
+            <h2>Important Features</h2>
+            <ul id="featureList" class="feature-list">
+              <li>Search with open map data, then compare route alternatives.</li>
+            </ul>
+          </div>
+
+          <div class="insight-block">
+            <h2>Ride Checks</h2>
+            <ul id="rideChecks" class="check-list">
+              <li>Review local road rules, weather, fuel range, and daylight before riding.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="directionsTab" class="tab-panel">
+          <ol id="directionsList" class="directions-list">
+            <li>Directions will appear after a route is built.</li>
+          </ol>
+        </section>
+      </aside>
+    </main>
+
+    <template id="routeChoiceTemplate">
+      <button type="button" class="route-choice">
+        <span class="choice-name"></span>
+        <span class="choice-meta"></span>
+      </button>
+    </template>
+
+    <div id="routeChoices" class="route-choices" aria-label="Route alternatives"></div>
+
+    <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+    <script src="./app.js?v=4"></script>
+  </body>
+</html>
